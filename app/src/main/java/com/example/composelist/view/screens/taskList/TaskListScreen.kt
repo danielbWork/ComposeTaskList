@@ -1,21 +1,28 @@
 package com.example.composelist.view.screens.taskList
 
+import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Checkbox
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.composelist.modal.Task
+import com.example.composelist.ui.theme.ComposeListTheme
 
 /**
  * Screen displaying the actual tasks list
@@ -43,50 +50,22 @@ fun TaskListScreen(taskListViewModel: TaskListViewModel) {
 			Card(
 				shape = RoundedCornerShape(20.dp),
 				elevation = 1.dp,
-				modifier = Modifier.padding(5.dp)
+				modifier = Modifier
+					.padding(5.dp),
+				border = BorderStroke(1.5.dp, MaterialTheme.colors.primary),
+
+
+
 			) {
+				TaskRow(it, { task, _ ->
 
-				Row(modifier = Modifier.padding(20.dp)) {
-					Text(
-						text = it.name,
-						// check if task item is complete then task will be crossed out
-						textDecoration = if (it.isComplete) {
-							TextDecoration.LineThrough
-						} else {
-							TextDecoration.None
-						}
-					)
-					
-					
-					Spacer(modifier = Modifier.fillMaxSize(0.7f))
-					
-					
-					Checkbox(
-						checked = it.isComplete, //value of the checkbox return from task list
-
-
-						onCheckedChange = { value ->
-
-							taskListViewModel.toggleTaskCompletion(
-								task = it
-							)
-
-						},
+					taskListViewModel.toggleTaskCompletion(
+						task = task
 					)
 
-					
-					Spacer(modifier = Modifier.width(10.dp))
-
-					// TODO Add alert
-					Icon(
-
-						imageVector = Icons.Filled.Delete, contentDescription = "Delete",
-
-						modifier = Modifier.clickable {
-							taskListViewModel.removeTask(it) // remove the task item from list
-						},
-					)				}
-
+				}, {
+					taskListViewModel.removeTask(it) // remove the task item from list
+				})
 			}
 
 		}
@@ -96,3 +75,81 @@ fun TaskListScreen(taskListViewModel: TaskListViewModel) {
 
 
 }
+
+@Composable
+fun TaskRow(task: Task, onToggleTask: (Task, Boolean) -> Unit, onDeleteTask: (Task) -> Unit) {
+
+	Row(
+		modifier = Modifier
+			.padding(10.dp)
+			.fillMaxWidth(),
+		verticalAlignment = Alignment.CenterVertically
+	) {
+
+
+		Checkbox(
+			checked = task.isComplete, //value of the checkbox return from task list
+
+
+			onCheckedChange = { isEnabled ->
+				onToggleTask(task, isEnabled)
+			},
+		)
+
+
+		Spacer(modifier = Modifier.width(10.dp))
+
+		Text(
+			text = task.name,
+			// check if task item is complete then task will be crossed out
+			textDecoration = if (task.isComplete) {
+				TextDecoration.LineThrough
+			} else {
+				TextDecoration.None
+			},
+			modifier = Modifier.fillMaxWidth(0.7f),
+			style = MaterialTheme.typography.body2,
+
+		)
+
+
+		Spacer(modifier = Modifier.fillMaxSize(0.7f))
+
+
+		// TODO Add alert
+		Icon(
+
+			imageVector = Icons.Filled.Delete, contentDescription = "Delete",
+
+			modifier = Modifier.clickable {
+				onDeleteTask(task)
+			}.scale(1.2f),
+
+
+			)
+
+	}
+
+}
+
+@Preview(name= "Light Mode", showBackground = true,)
+@Preview(
+	uiMode = Configuration.UI_MODE_NIGHT_YES,
+	showBackground = true,
+	name = "Dark Mode"
+)
+@Composable
+fun TaskListPreview() {
+
+	val viewModel = TaskListViewModel()
+
+	viewModel.addTask(Task("", "Test Example", false))
+	viewModel.addTask(Task("", "Test Example complete", true))
+	viewModel.addTask(
+		Task("", "Test Example complete lonansjfknasjknsakgnjgskanj asndklmsadk", true)
+	)
+	ComposeListTheme{
+		TaskListScreen(taskListViewModel = viewModel)
+	}
+}
+

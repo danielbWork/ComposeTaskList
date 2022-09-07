@@ -21,9 +21,13 @@ import com.example.composelist.modal.Task
 import com.example.composelist.view.screens.taskList.TaskListViewModel
 import java.util.*
 
+/**
+ * Dialog asking user for name to add a task
+ * @param isDialogOpen Flag marking if te dialog is open or closed
+ */
 @Composable
 fun AddTaskDialog(
-	openDialog: MutableState<Boolean>,
+	isDialogOpen: MutableState<Boolean>,
 	taskListViewModel: TaskListViewModel
 ) {
 	var task by remember { mutableStateOf(TextFieldValue("")) }
@@ -33,7 +37,7 @@ fun AddTaskDialog(
 		shape = RoundedCornerShape(16.dp),
 		onDismissRequest = {
 			// Dismiss the dialog when the user clicks outside the dialog or on the back
-			openDialog.value = false
+			isDialogOpen.value = false
 		},
 		title = {
 			Text(
@@ -80,7 +84,7 @@ fun AddTaskDialog(
 								isComplete = false  // by default to do item is incomplete
 							)
 						)
-						openDialog.value = false // for closing the dialog
+						isDialogOpen.value = false // for closing the dialog
 					}
 				},
 			) {
@@ -92,7 +96,7 @@ fun AddTaskDialog(
 			Button(
 
 				onClick = {
-					openDialog.value =
+					isDialogOpen.value =
 						false //close the dialog to assign the value false when Cancel button is clicked
 				},
 			) {

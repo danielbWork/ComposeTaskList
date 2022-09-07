@@ -32,7 +32,7 @@ fun HomeScreen() {
 
 				//check if openDialog value is true then it display Alert Dialog
 				if (openAddDialog.value) {
-					AddTaskDialog(openDialog = openAddDialog, taskListViewModel)
+					AddTaskDialog(isDialogOpen = openAddDialog, taskListViewModel)
 				}
 
 			}

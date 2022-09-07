@@ -14,6 +14,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -21,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.composelist.components.DeleteTaskDialog
 import com.example.composelist.modal.Task
 import com.example.composelist.ui.theme.ComposeListTheme
 
@@ -39,10 +42,21 @@ fun TaskListScreen(taskListViewModel: TaskListViewModel) {
 		return
 	}
 
+	val taskToDelete =
+		remember { mutableStateOf<Task?>(null) }// for remembering the value of dialog is open or not
+
+	if(taskToDelete.value != null){
+
+		// remove the task item from list
+		DeleteTaskDialog(
+			taskListViewModel = taskListViewModel,
+			taskToDelete = taskToDelete
+		)
+	}
+
 	// Actual list
 	LazyColumn(modifier = Modifier.fillMaxHeight()) {
 
-		// TODO Separate this to another file for task
 		// TODO Add Subtask code
 		items(taskListViewModel.getTaskList()) {
 
@@ -64,7 +78,9 @@ fun TaskListScreen(taskListViewModel: TaskListViewModel) {
 					)
 
 				}, {
-					taskListViewModel.removeTask(it) // remove the task item from list
+
+					// Notifies ui to open delete dialog
+					taskToDelete.value = it
 				})
 			}
 
@@ -116,14 +132,15 @@ fun TaskRow(task: Task, onToggleTask: (Task, Boolean) -> Unit, onDeleteTask: (Ta
 		Spacer(modifier = Modifier.fillMaxSize(0.7f))
 
 
-		// TODO Add alert
 		Icon(
 
 			imageVector = Icons.Filled.Delete, contentDescription = "Delete",
 
-			modifier = Modifier.clickable {
-				onDeleteTask(task)
-			}.scale(1.2f),
+			modifier = Modifier
+				.clickable {
+					onDeleteTask(task)
+				}
+				.scale(1.2f),
 
 
 			)

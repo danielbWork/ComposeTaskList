@@ -3,11 +3,13 @@ package com.example.composelist
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.example.composelist.tasklist.viewModal.TaskListViewModalFactory
 import com.example.composelist.ui.theme.ComposeListTheme
 
 class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+
 		setContent {
 
 			ComposeListTheme {

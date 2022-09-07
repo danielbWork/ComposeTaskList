@@ -1,16 +1,18 @@
 package com.example.composelist.tasklist.modal
 
-//import androidx.room.ColumnInfo
-//import androidx.room.Entity
-//import androidx.room.PrimaryKey
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 
-//@Entity(tableName = "tasks")
+@Entity(tableName = "tasks")
 data class Task(
-//	@PrimaryKey(autoGenerate = true)
+	@PrimaryKey(autoGenerate = true)
 	val id: Int = 0,
-//	@ColumnInfo(name = "name")
+	@ColumnInfo(name = "name")
 	var name: String,
-//	@ColumnInfo(name = "isComplete")
+	@ColumnInfo(name = "is_complete")
 	var isComplete: Boolean,
-	var subTasks: List<Task>? = null
+//	@Ignore
+//	var subTasks: List<Task>? = null
 )

@@ -1,6 +1,5 @@
 package com.example.composelist.tasklist.view.screens
 
-import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -18,12 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.composelist.tasklist.view.screens.dialogs.DeleteTaskDialog
 import com.example.composelist.tasklist.modal.Task
+import com.example.composelist.tasklist.view.screens.dialogs.DeleteTaskDialog
 import com.example.composelist.tasklist.viewModal.TaskListViewModel
-import com.example.composelist.ui.theme.ComposeListTheme
+import androidx.compose.runtime.*
 
 /**
  * Screen displaying the actual tasks list
@@ -31,8 +30,11 @@ import com.example.composelist.ui.theme.ComposeListTheme
 @Composable
 fun TaskListScreen(taskListViewModel: TaskListViewModel) {
 
+	val tasks by taskListViewModel.taskList.observeAsState(initial = listOf())
+
+
 	// Default screen
-	if (taskListViewModel.getTaskList().isEmpty()) {
+	if (tasks.isEmpty()) {
 		Text(
 			text = "No tasks entered yet", textAlign = TextAlign.Center,
 			modifier = Modifier.fillMaxHeight()
@@ -41,9 +43,13 @@ fun TaskListScreen(taskListViewModel: TaskListViewModel) {
 	}
 
 	val taskToDelete =
-		remember { mutableStateOf<Task?>(null) }// for remembering the value of dialog is open or not
+		remember {
+			mutableStateOf<Task?>(
+				null
+			)
+		}// for remembering the value of dialog is open or not
 
-	if(taskToDelete.value != null){
+	if (taskToDelete.value != null) {
 
 		// remove the task item from list
 		DeleteTaskDialog(
@@ -56,7 +62,7 @@ fun TaskListScreen(taskListViewModel: TaskListViewModel) {
 	LazyColumn(modifier = Modifier.fillMaxHeight()) {
 
 		// TODO Add Subtask code
-		items(taskListViewModel.getTaskList()) {
+		items(items = tasks) {
 
 
 			Card(
@@ -67,8 +73,7 @@ fun TaskListScreen(taskListViewModel: TaskListViewModel) {
 				border = BorderStroke(1.5.dp, MaterialTheme.colors.primary),
 
 
-
-			) {
+				) {
 				TaskRow(it, { task, _ ->
 
 					taskListViewModel.toggleTaskCompletion(
@@ -124,7 +129,7 @@ fun TaskRow(task: Task, onToggleTask: (Task, Boolean) -> Unit, onDeleteTask: (Ta
 			modifier = Modifier.fillMaxWidth(0.7f),
 			style = MaterialTheme.typography.body2,
 
-		)
+			)
 
 
 		Spacer(modifier = Modifier.fillMaxSize(0.7f))
@@ -147,24 +152,24 @@ fun TaskRow(task: Task, onToggleTask: (Task, Boolean) -> Unit, onDeleteTask: (Ta
 
 }
 
-@Preview(name= "Light Mode", showBackground = true,)
-@Preview(
-	uiMode = Configuration.UI_MODE_NIGHT_YES,
-	showBackground = true,
-	name = "Dark Mode"
-)
-@Composable
-fun TaskListPreview() {
-
-	val viewModel = TaskListViewModel()
-
-	viewModel.addTask(Task(name ="Test Example", isComplete =  false))
-	viewModel.addTask(Task(name ="Test Example complete", isComplete = true))
-	viewModel.addTask(
-		Task(name ="Test Example complete lonansjfknasjknsakgnjgskanj asndklmsadk",isComplete =  true)
-	)
-	ComposeListTheme{
-		TaskListScreen(taskListViewModel = viewModel)
-	}
-}
+//@Preview(name= "Light Mode", showBackground = true,)
+//@Preview(
+//	uiMode = Configuration.UI_MODE_NIGHT_YES,
+//	showBackground = true,
+//	name = "Dark Mode"
+//)
+//@Composable
+//fun TaskListPreview() {
+//
+//	val viewModel = TaskListViewModel(Application())
+//
+//	viewModel.addTask(Task(name ="Test Example", isComplete =  false))
+//	viewModel.addTask(Task(name ="Test Example complete", isComplete = true))
+//	viewModel.addTask(
+//		Task(name ="Test Example complete lonansjfknasjknsakgnjgskanj asndklmsadk",isComplete =  true)
+//	)
+//	ComposeListTheme{
+//		TaskListScreen(taskListViewModel = viewModel)
+//	}
+//}
 

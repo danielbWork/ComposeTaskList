@@ -1,5 +1,6 @@
 package com.example.composelist
 
+import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -12,16 +13,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composelist.tasklist.view.screens.dialogs.AddTaskDialog
 import com.example.composelist.tasklist.view.screens.TaskListScreen
+import com.example.composelist.tasklist.viewModal.TaskListViewModalFactory
 import com.example.composelist.tasklist.viewModal.TaskListViewModel
 
 @Composable
 fun HomeScreen() {
+
 	val openAddDialog =
 		remember { mutableStateOf(false) }// for remembering the value of dialog is open or not
-	val taskListViewModel by remember { mutableStateOf(TaskListViewModel()) }
+	val taskListViewModel: TaskListViewModel = viewModel(
+		factory = TaskListViewModalFactory(
+			application = LocalContext.current.applicationContext as Application
+		)
+	)
 
 	Scaffold(
 
@@ -48,7 +57,7 @@ fun HomeScreen() {
 				.padding(20.dp)
 				.fillMaxHeight(),
 			verticalArrangement = Arrangement.Center,
-			horizontalAlignment =  Alignment.CenterHorizontally
+			horizontalAlignment = Alignment.CenterHorizontally
 		) {
 
 			TaskListScreen(taskListViewModel)

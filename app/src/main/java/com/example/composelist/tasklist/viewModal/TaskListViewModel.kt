@@ -1,8 +1,8 @@
-package com.example.composelist.view.screens.taskList
+package com.example.composelist.tasklist.viewModal
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import com.example.composelist.modal.Task
+import com.example.composelist.tasklist.modal.Task
 
 /**
  * View Model in charge of handleing a single task in the the task list

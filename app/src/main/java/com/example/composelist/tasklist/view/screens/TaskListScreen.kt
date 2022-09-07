@@ -1,14 +1,11 @@
-package com.example.composelist.view.screens.taskList
+package com.example.composelist.tasklist.view.screens
 
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -23,8 +20,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.composelist.components.DeleteTaskDialog
-import com.example.composelist.modal.Task
+import com.example.composelist.tasklist.view.screens.dialogs.DeleteTaskDialog
+import com.example.composelist.tasklist.modal.Task
+import com.example.composelist.tasklist.viewModal.TaskListViewModel
 import com.example.composelist.ui.theme.ComposeListTheme
 
 /**
@@ -160,10 +158,10 @@ fun TaskListPreview() {
 
 	val viewModel = TaskListViewModel()
 
-	viewModel.addTask(Task("", "Test Example", false))
-	viewModel.addTask(Task("", "Test Example complete", true))
+	viewModel.addTask(Task(name ="Test Example", isComplete =  false))
+	viewModel.addTask(Task(name ="Test Example complete", isComplete = true))
 	viewModel.addTask(
-		Task("", "Test Example complete lonansjfknasjknsakgnjgskanj asndklmsadk", true)
+		Task(name ="Test Example complete lonansjfknasjknsakgnjgskanj asndklmsadk",isComplete =  true)
 	)
 	ComposeListTheme{
 		TaskListScreen(taskListViewModel = viewModel)

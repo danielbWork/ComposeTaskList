@@ -1,4 +1,4 @@
-package com.example.composelist.components
+package com.example.composelist.tasklist.view.screens.dialogs
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,9 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import com.example.composelist.modal.Task
-import com.example.composelist.view.screens.taskList.TaskListViewModel
-import java.util.*
+import com.example.composelist.tasklist.modal.Task
+import com.example.composelist.tasklist.viewModal.TaskListViewModel
 
 /**
  * Dialog asking user for name to add a task
@@ -78,8 +77,6 @@ fun AddTaskDialog(
 						//add the the task on the taskList
 						taskListViewModel.addTask(
 							Task(
-								id = UUID.randomUUID().toString(), //generate unique id
-
 								name = task.text,// text of the text field
 								isComplete = false  // by default to do item is incomplete
 							)

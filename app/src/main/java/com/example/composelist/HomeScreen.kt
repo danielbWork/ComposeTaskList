@@ -1,4 +1,4 @@
-package com.example.composelist.view.screens
+package com.example.composelist
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,9 +13,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.composelist.components.AddTaskDialog
-import com.example.composelist.view.screens.taskList.TaskListScreen
-import com.example.composelist.view.screens.taskList.TaskListViewModel
+import com.example.composelist.tasklist.view.screens.dialogs.AddTaskDialog
+import com.example.composelist.tasklist.view.screens.TaskListScreen
+import com.example.composelist.tasklist.viewModal.TaskListViewModel
 
 @Composable
 fun HomeScreen() {

@@ -48,12 +48,13 @@ fun HomeScreen() {
 
 		}, topBar = {
 			TopAppBar() {
-				Text("Task List")
+				Text( modifier = Modifier.padding(start = 25.dp), text = "Task List")
 			}
 		}) {
 
 		Column(
-			modifier = Modifier
+			modifier = Modifier.
+			padding(it)
 				.padding(20.dp)
 				.fillMaxHeight(),
 			verticalArrangement = Arrangement.Center,

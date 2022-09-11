@@ -25,61 +25,24 @@ fun DeleteTaskDialog(
 
 	val task = taskToDelete.value
 
-	AlertDialog(
-		properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = false),
-		shape = RoundedCornerShape(16.dp),
-		onDismissRequest = {
-			// Dismiss the dialog when the user clicks outside the dialog or on the back
-			taskToDelete.value = null
-		},
-		title = {
-			Text(
-				text = "Remove Task", modifier = Modifier.padding(20.dp),
-				fontWeight = FontWeight.Bold,
-				fontSize = 16.sp
-			)
-		},
-		text = {
-			Column(
+	BaseDialog(title = "Remove Task", onDismiss = {
+		// Dismiss the dialog when the user clicks outside the dialog or on the back
+		taskToDelete.value = null
+	}, onSubmit = {
+		// When pressed task should always be non-null
+		taskListViewModel.removeTask(task!!)
+		taskToDelete.value = null // for closing the dialog
+	}, submitText = "Remove") {
+		Column(
 				modifier = Modifier.padding(10.dp),
-			) {
+		) {
 
-				// Input field for text
-				Text(
-					text = "Are you sure you want to delete ${task?.name}?",
+			// Input field for text
+			Text(
+					text = "Are you sure you want to delete ${task?.name?.trim()}?",
 					style = MaterialTheme.typography.body1
-				)
-			}
-
-		},
-		confirmButton = {
-
-			Button(
-				onClick = {
-					// When pressed task should always be non-null
-					taskListViewModel.removeTask(task!!)
-					taskToDelete.value = null // for closing the dialog
-				},
-			) {
-				Text(text = "Remove")
-			}
-
-		},
-		dismissButton = {
-			Button(
-
-				onClick = {
-					taskToDelete.value =
-						null // close the dialog to assign the value false when Cancel button is clicked
-				},
-			) {
-				Text(
-					"Cancel"
-				)
-			}
+			)
 		}
-
-
-	)
+	}
 
 }

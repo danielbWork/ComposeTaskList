@@ -1,4 +1,4 @@
-package com.example.composelist.tasklist.view.screens.dialogs
+package com.example.composelist.taskInfo.dialogs
 
 import android.R
 import androidx.compose.foundation.*
@@ -29,31 +29,27 @@ import com.example.composelist.tasklist.viewModal.TaskListViewModel
 import kotlinx.coroutines.delay
 
 /**
- * Dialog asking user for name to add a task
- * @param isDialogOpen Flag marking if te dialog is open or closed
+ * Dialog asking user for a name for the task
+ * @param isDialogOpen Flag marking if the dialog is open or closed
  */
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun AddTaskDialog(
+fun EditTaskDialog(
+		task: Task,
 		isDialogOpen: MutableState<Boolean>,
 		taskListViewModel: TaskListViewModel
 ) {
-	var task by remember { mutableStateOf(TextFieldValue("")) }
 
-	BaseDialog(title = "Add Task", onDismiss = {
+	var taskName by remember { mutableStateOf(TextFieldValue(task.name)) }
+
+
+	BaseDialog(title = "Edit Task Name", onDismiss = {
 		// Dismiss the dialog when the user clicks outside the dialog or on the back
 		isDialogOpen.value = false
 	}, onSubmit = {
-		if (task.text.trim().isNotEmpty()) {
+		if (taskName.text.trim().isNotEmpty()) {
 
-			//add the the task on the taskList
-			taskListViewModel.addTask(
-					Task(
-							name = task.text.trim(),// text of the text
-							// field
-							isComplete = false  // by default to do item is incomplete
-					)
-			)
+			// Update the the task in the taskList
+			taskListViewModel.updateTaskName(task, taskName.text.trim())
 			isDialogOpen.value = false // for closing the dialog
 		}
 	}, submitText = "Done") {
@@ -67,9 +63,9 @@ fun AddTaskDialog(
 		}
 
 		TextField(
-				value = task,
+				value = taskName,
 				onValueChange = {
-					task = it
+					taskName = it
 				},
 				modifier = Modifier
 						.fillMaxWidth()
@@ -98,7 +94,7 @@ fun AddTaskDialog(
 						keyboardType = KeyboardType.Text,
 						capitalization = KeyboardCapitalization.Sentences
 				),
-				placeholder = { Text(text = "My New Task") },
+				placeholder = { Text(text = "My Task") },
 				leadingIcon = {
 					Icon(
 							imageVector = Icons.Filled.Edit,

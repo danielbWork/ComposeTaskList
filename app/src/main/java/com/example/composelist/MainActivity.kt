@@ -3,7 +3,17 @@ package com.example.composelist
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.material.MaterialTheme
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.composelist.tasklist.viewModal.TaskListViewModalFactory
+import com.example.composelist.tasklist.viewModal.TaskListViewModel
 import com.example.composelist.ui.theme.ComposeListTheme
 
 class MainActivity : ComponentActivity() {
@@ -12,8 +22,37 @@ class MainActivity : ComponentActivity() {
 
 		setContent {
 
+			val taskListViewModel: TaskListViewModel = viewModel(
+					factory = TaskListViewModalFactory(
+							application = application
+					)
+			)
+
 			ComposeListTheme {
-				HomeScreen()
+
+				val navController = rememberNavController()
+
+				NavHost(navController = navController, startDestination = "home", modifier =
+				Modifier.background(MaterialTheme.colors.background)) {
+
+					composable("home") {
+						HomeScreen(
+								navController = navController,
+								taskListViewModel = taskListViewModel,
+						)
+					}
+					composable("info/{id}", arguments = listOf(navArgument("id") {
+						type = NavType
+								.IntType
+					})) {
+						TaskInfoScreen(
+								navController = navController,
+								taskListViewModel = taskListViewModel,
+								taskId = it.arguments?.getInt("id") ?: 0
+						)
+					}
+				}
+
 			}
 		}
 	}

@@ -25,12 +25,18 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
 
 	}
 
+	/**
+	 * Add the task to the list
+	 */
 	fun addTask(task: Task) {
 		viewModelScope.launch(Dispatchers.IO){
 			repository.addTask(task)
 		}
 	}
 
+	/**
+	 * Removes the task from the list
+	 */
 	fun removeTask(task: Task) {
 		viewModelScope.launch(Dispatchers.IO){
 			repository.deleteTask(task)
@@ -43,6 +49,23 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
 
 		viewModelScope.launch(Dispatchers.IO){
 			repository.updateTask(task.copy(isComplete = !task.isComplete))
+		}
+	}
+
+	/**
+	 *  Gets the value of the task with the given id
+	 */
+	fun getTaskByID(id: Int): LiveData<Task> {
+
+		return repository.getByID(id)
+	}
+
+	/**
+	 * Updated the task name with the new one
+	 */
+	fun updateTaskName(task: Task, taskName: String) {
+		viewModelScope.launch(Dispatchers.IO){
+			repository.updateTask(task.copy(name = taskName))
 		}
 	}
 

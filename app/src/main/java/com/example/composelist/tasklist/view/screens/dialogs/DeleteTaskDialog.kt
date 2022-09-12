@@ -2,15 +2,12 @@ package com.example.composelist.tasklist.view.screens.dialogs
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
+import com.example.composelist.BaseDialog
 import com.example.composelist.tasklist.modal.Task
 import com.example.composelist.tasklist.viewModal.TaskListViewModel
 

@@ -1,4 +1,4 @@
-package com.example.composelist.tasklist.view.screens.dialogs
+package com.example.composelist
 
 import android.R
 import androidx.compose.foundation.clickable

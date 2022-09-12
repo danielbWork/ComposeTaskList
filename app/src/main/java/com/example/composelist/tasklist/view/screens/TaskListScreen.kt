@@ -1,6 +1,5 @@
 package com.example.composelist.tasklist.view.screens
 
-import android.app.Application
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -11,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -33,7 +33,7 @@ import com.example.composelist.ui.theme.ComposeListTheme
  * Screen displaying the actual tasks list
  */
 @Composable
-fun TaskListScreen(taskListViewModel: TaskListViewModel) {
+fun TaskListScreen(taskListViewModel: TaskListViewModel, onEditPress: (Task) -> Unit) {
 
 	val tasks by taskListViewModel.taskList.observeAsState(initial = listOf())
 
@@ -89,7 +89,7 @@ fun TaskListScreen(taskListViewModel: TaskListViewModel) {
 
 					// Notifies ui to open delete dialog
 					taskToDelete.value = it
-				})
+				}, onEditPress)
 			}
 
 		}
@@ -101,7 +101,12 @@ fun TaskListScreen(taskListViewModel: TaskListViewModel) {
 }
 
 @Composable
-fun TaskRow(task: Task, onToggleTask: (Task, Boolean) -> Unit, onDeleteTask: (Task) -> Unit) {
+fun TaskRow(
+		task: Task,
+		onToggleTask: (Task, Boolean) -> Unit,
+		onDeleteTask: (Task) -> Unit,
+		onEditPress: (Task) -> Unit
+) {
 
 	Row(
 			modifier = Modifier
@@ -137,23 +142,38 @@ fun TaskRow(task: Task, onToggleTask: (Task, Boolean) -> Unit, onDeleteTask: (Ta
 				)
 
 
-		Spacer(modifier = Modifier.fillMaxSize(0.7f))
+//		Spacer(modifier = Modifier.fillMaxSize(0.3f))
+
+		Row() {
+			Icon(
+
+					imageVector = Icons.Filled.Edit, contentDescription = "Edit",
+
+					modifier = Modifier
+							.clickable {
+								onEditPress(task)
+							}
+							.scale(1.2f),
+
+					)
+
+			Spacer(modifier = Modifier.fillMaxSize(0.4f))
+
+			Icon(
+
+					imageVector = Icons.Filled.Delete, contentDescription = "Delete",
+
+					modifier = Modifier
+							.clickable {
+								onDeleteTask(task)
+							}
+							.scale(1.2f),
 
 
-		Icon(
-
-				imageVector = Icons.Filled.Delete, contentDescription = "Delete",
-
-				modifier = Modifier
-						.clickable {
-							onDeleteTask(task)
-						}
-						.scale(1.2f),
-
-
-				)
-
+					)
+		}
 	}
+
 
 }
 
@@ -203,7 +223,8 @@ fun TaskListPreview() {
 					TaskRow(
 							task = it,
 							onToggleTask = { _: Task, _: Boolean -> },
-							onDeleteTask = { }
+							onDeleteTask = { },
+							onEditPress = {}
 					)
 				}
 			}

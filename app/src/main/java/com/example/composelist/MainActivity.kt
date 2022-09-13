@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.composelist.taskInfo.view.screens.TaskInfoScreen
 import com.example.composelist.tasklist.viewModal.TaskListViewModalFactory
 import com.example.composelist.tasklist.viewModal.TaskListViewModel
 import com.example.composelist.ui.theme.ComposeListTheme

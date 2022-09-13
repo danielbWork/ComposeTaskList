@@ -1,4 +1,4 @@
-package com.example.composelist.taskInfo.dialogs
+package com.example.composelist.taskInfo.view.screens.dialogs
 
 import android.R
 import androidx.compose.foundation.*
@@ -14,7 +14,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester

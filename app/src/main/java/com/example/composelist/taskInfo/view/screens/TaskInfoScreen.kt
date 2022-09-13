@@ -1,20 +1,18 @@
-package com.example.composelist
+package com.example.composelist.taskInfo.view.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.composelist.taskInfo.view.TaskNameRow
+import com.example.composelist.taskInfo.view.TaskInfoRow
 import com.example.composelist.taskInfo.view.TaskTimeRow
 import com.example.composelist.tasklist.modal.Task
 import com.example.composelist.tasklist.viewModal.TaskListViewModel
@@ -40,13 +38,13 @@ fun TaskInfoScreen(navController: NavController, taskListViewModel: TaskListView
 		Column(
 				modifier = Modifier
 						.padding(it)
-						.padding(20.dp)
+						.padding(horizontal = 20.dp, vertical = 10.dp)
 						.fillMaxHeight(),
 				verticalArrangement = Arrangement.Top,
 				horizontalAlignment = Alignment.CenterHorizontally
 		) {
 
-			TaskNameRow(task,taskListViewModel)
+			TaskInfoRow(task,taskListViewModel)
 
 			CustomDivider()
 

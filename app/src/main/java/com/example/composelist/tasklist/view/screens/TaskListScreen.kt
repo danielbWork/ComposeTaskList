@@ -1,5 +1,6 @@
 package com.example.composelist.tasklist.view.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,16 +18,21 @@ import com.example.composelist.tasklist.modal.Task
 import com.example.composelist.tasklist.view.screens.dialogs.DeleteTaskDialog
 import com.example.composelist.tasklist.viewModal.TaskListViewModel
 import androidx.compose.runtime.*
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.composelist.tasklist.view.TaskRow
+import com.example.composelist.ui.theme.ComposeListTheme
 
 /**
  * Screen displaying the actual tasks list
  */
 @Composable
-fun TaskListScreen(taskListViewModel: TaskListViewModel, onEditPress: (Task) -> Unit) {
-
-	val tasks by taskListViewModel.taskList.observeAsState(initial = listOf())
-
+fun TaskListScreen(
+		tasks: List<Task>,
+		onEditPress: (Task) -> Unit,
+		onToggleTask: (Task) -> Unit,
+		onDeletePress: ((Task) -> Unit)? = null
+) {
 
 	// Default screen
 	if (tasks.isEmpty()) {
@@ -37,28 +43,10 @@ fun TaskListScreen(taskListViewModel: TaskListViewModel, onEditPress: (Task) -> 
 		return
 	}
 
-	val taskToDelete =
-			remember {
-				mutableStateOf<Task?>(
-						null
-				)
-			}// for remembering the value of dialog is open or not
-
-	if (taskToDelete.value != null) {
-
-		// remove the task item from list
-		DeleteTaskDialog(
-				taskListViewModel = taskListViewModel,
-				taskToDelete = taskToDelete
-		)
-	}
-
 	// Actual list
 	LazyColumn(modifier = Modifier.fillMaxHeight()) {
 
-		// TODO Add Subtask code
 		items(items = tasks) {
-
 
 			Card(
 					shape = RoundedCornerShape(20.dp),
@@ -69,17 +57,7 @@ fun TaskListScreen(taskListViewModel: TaskListViewModel, onEditPress: (Task) -> 
 
 
 					) {
-				TaskRow(it, { task->
-
-					taskListViewModel.toggleTaskCompletion(
-							task = task
-					)
-
-				}, {
-
-					// Notifies ui to open delete dialog
-					taskToDelete.value = it
-				}, onEditPress)
+				TaskRow(it, onEditPress, onToggleTask, onDeletePress)
 			}
 
 		}
@@ -88,6 +66,40 @@ fun TaskListScreen(taskListViewModel: TaskListViewModel, onEditPress: (Task) -> 
 	}
 
 
+}
+
+
+@Preview(
+		name = "Light Mode",
+		showBackground = true,
+		device = Devices.PIXEL
+)
+@Preview(
+		uiMode = Configuration.UI_MODE_NIGHT_YES,
+		showBackground = true,
+		name = "Dark Mode",
+		device = Devices.PIXEL
+)
+@Composable
+fun TaskListPreview() {
+
+	val tasks = listOf(
+			Task(name = "Test Example"),
+			Task(
+					name = "Test Example " +
+						   "complete", isComplete = true
+			),
+			Task(
+					name = "Test Example complete lonansjfknasjknsakgnjgskanj asndklmsadk",
+					isComplete = true
+			)
+	)
+
+	ComposeListTheme {
+		// Actual list
+		TaskListScreen(tasks = tasks, onEditPress = {}, onToggleTask = {}, onDeletePress = {})
+
+	}
 }
 
 

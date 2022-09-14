@@ -31,29 +31,38 @@ import kotlinx.coroutines.delay
 /**
  * Dialog asking user for name to add a task
  * @param isDialogOpen Flag marking if te dialog is open or closed
+ * @param task Used to mark that user is adding a subtask
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AddTaskDialog(
 		isDialogOpen: MutableState<Boolean>,
-		taskListViewModel: TaskListViewModel
+		taskListViewModel: TaskListViewModel,
+		task: Task? = null
 ) {
-	var task by remember { mutableStateOf(TextFieldValue("")) }
+	var newTask by remember { mutableStateOf(TextFieldValue("")) }
 
-	BaseDialog(title = "Add Task", onDismiss = {
+	BaseDialog(title = "Add ${if(task !== null) "Subtask" else "Task"}", onDismiss = {
 		// Dismiss the dialog when the user clicks outside the dialog or on the back
 		isDialogOpen.value = false
 	}, onSubmit = {
-		if (task.text.trim().isNotEmpty()) {
+		if (newTask.text.trim().isNotEmpty()) {
 
-			//add the the task on the taskList
-			taskListViewModel.addTask(
-					Task(
-							name = task.text.trim(),// text of the text
-							// field
-							isComplete = false  // by default to do item is incomplete
-					)
-			)
+			if(task !== null){
+				//add the the new subtask to the task
+				taskListViewModel.addSubTask(task , Task(name = newTask.text.trim()))
+			}
+			else {
+				//add the the new task on the taskList
+				taskListViewModel.addTask(
+						Task(
+								name = newTask.text.trim(),// text of the text
+								// field
+						)
+				)
+			}
+
+
 			isDialogOpen.value = false // for closing the dialog
 		}
 	}, submitText = "Done") {
@@ -67,9 +76,9 @@ fun AddTaskDialog(
 		}
 
 		TextField(
-				value = task,
+				value = newTask,
 				onValueChange = {
-					task = it
+					newTask = it
 				},
 				modifier = Modifier
 						.fillMaxWidth()

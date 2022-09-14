@@ -60,6 +60,7 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
 
+    implementation 'com.google.code.gson:gson:2.9.0'
 
     // region Room
     implementation("androidx.room:room-runtime:$roomVersion")

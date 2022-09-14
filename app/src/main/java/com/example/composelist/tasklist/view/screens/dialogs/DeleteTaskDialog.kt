@@ -16,19 +16,30 @@ import com.example.composelist.tasklist.viewModal.TaskListViewModel
  */
 @Composable
 fun DeleteTaskDialog(
-	taskListViewModel: TaskListViewModel,
-	taskToDelete: MutableState<Task?>,
+		task: MutableState<Task?>,
+		subTask: MutableState<Task?>? = null,
+		taskListViewModel: TaskListViewModel,
 ) {
 
-	val task = taskToDelete.value
+	val taskToDelete = subTask?.value ?: task.value!!
 
-	BaseDialog(title = "Remove Task", onDismiss = {
+	BaseDialog(title = "Remove ${if (subTask?.value !== null) "Subtask" else "Task"}", onDismiss = {
 		// Dismiss the dialog when the user clicks outside the dialog or on the back
-		taskToDelete.value = null
+		task.value = null
+		subTask?.value = null
 	}, onSubmit = {
-		// When pressed task should always be non-null
-		taskListViewModel.removeTask(task!!)
-		taskToDelete.value = null // for closing the dialog
+
+		// When Called task should always be non-null
+		if (subTask?.value !== null) {
+			taskListViewModel.removeSubTask(task.value!!, subTask.value!!)
+		} else {
+			taskListViewModel.removeTask(task.value!!)
+		}
+
+		// for closing the dialog
+		task.value = null
+		subTask?.value = null
+
 	}, submitText = "Remove") {
 		Column(
 				modifier = Modifier.padding(10.dp),
@@ -36,7 +47,7 @@ fun DeleteTaskDialog(
 
 			// Input field for text
 			Text(
-					text = "Are you sure you want to delete ${task?.name?.trim()}?",
+					text = "Are you sure you want to delete ${taskToDelete.name.trim()}?",
 					style = MaterialTheme.typography.body1
 			)
 		}

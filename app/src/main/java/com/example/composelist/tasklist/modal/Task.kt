@@ -10,12 +10,18 @@ import java.time.LocalDateTime
 data class Task(
 		@PrimaryKey(autoGenerate = true)
 		val id: Int = 0,
+
 		@ColumnInfo(name = "name")
 		var name: String,
+
 		@ColumnInfo(name = "is_complete")
-		var isComplete: Boolean,
+		var isComplete: Boolean = false,
+
 		@ColumnInfo(name = "creation_time", defaultValue = "1662977020089")
-		val creationTime: Long = java.util.Calendar.getInstance().timeInMillis
+		val creationTime: Long = java.util.Calendar.getInstance().timeInMillis,
+
+		@ColumnInfo(name = "subtasks", defaultValue = "")
+		val subTasks: List<Task> = listOf()
 //	@Ignore
 //	var subTasks: List<Task>? = null
 )

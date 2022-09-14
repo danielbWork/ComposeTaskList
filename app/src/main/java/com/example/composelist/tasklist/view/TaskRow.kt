@@ -1,13 +1,12 @@
 package com.example.composelist.tasklist.view
 
 import android.content.res.Configuration
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Checkbox
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -28,9 +27,9 @@ import com.example.composelist.ui.theme.ComposeListTheme
 @Composable
 fun TaskRow(
 		task: Task,
+		onEditPress: (Task) -> Unit,
 		onToggleTask: (Task) -> Unit,
 		onDeleteTask: ((Task)-> Unit)? = null,
-		onEditPress: (Task) -> Unit
 ) {
 
 	Row(
@@ -43,8 +42,6 @@ fun TaskRow(
 
 		Checkbox(
 				checked = task.isComplete, //value of the checkbox return from task list
-
-
 				onCheckedChange = {
 					onToggleTask(task)
 				},
@@ -75,7 +72,6 @@ fun TaskRow(
 			Icon(
 
 					imageVector = Icons.Filled.Edit, contentDescription = "Edit",
-
 					modifier = Modifier
 							.clickable {
 								onEditPress(task)
@@ -105,11 +101,6 @@ fun TaskRow(
 
 }
 
-
-/**
- * The preview here is more complex then an average preview to avoid adding the unnecessary preview
- *  parameter code, while if the card code changes it's not as critical for such a small app
- */
 @Preview(
 		name = "Light Mode",
 		showBackground = true,
@@ -122,57 +113,28 @@ fun TaskRow(
 		device = Devices.PIXEL
 )
 @Composable
-fun TaskListPreview() {
+fun TaskPreview() {
+	ComposeListTheme {
+		Column() {
+			// Actual list
+			TaskRow(task = Task(name = "Test Example"), onEditPress = {}, onToggleTask = {},
+					onDeleteTask = {})
 
-	val tasks = listOf(
-			Task(name = "Test Example", isComplete = false),
-			Task(
+			TaskRow(task = Task(
 					name = "Test Example " +
 						   "complete", isComplete = true
-			),
-			Task(
+			), onEditPress = {}, onToggleTask = {},
+					onDeleteTask = {})
+
+			TaskRow(task = Task(
 					name = "Test Example complete lonansjfknasjknsakgnjgskanj asndklmsadk",
 					isComplete = true
-			),
-			Task(name = "NODELETE", isComplete = false)
-	)
+			), onEditPress = {}, onToggleTask = {},
+					onDeleteTask = {})
 
-	ComposeListTheme {
-		// Actual list
-		LazyColumn(modifier = Modifier.fillMaxHeight()) {
-
-			items(items = tasks) {
-				Card(
-						shape = RoundedCornerShape(20.dp),
-						elevation = 1.dp,
-						modifier = Modifier
-								.padding(5.dp),
-						border = BorderStroke(1.5.dp, MaterialTheme.colors.primary),
-
-
-						) {
-
-					if (it.name != "NODELETE"){
-						TaskRow(
-								task = it,
-								onToggleTask = { },
-								onDeleteTask = {},
-								onEditPress = {}
-						)
-					}
-					else {
-						TaskRow(
-								task = it,
-								onToggleTask = { },
-								onDeleteTask = null,
-								onEditPress = {}
-						)
-					}
-
-				}
-
-			}
-
+			TaskRow(task = Task(name = "No Delete"), onEditPress = {}, onToggleTask = {},
+					onDeleteTask = null)
 		}
+
 	}
 }

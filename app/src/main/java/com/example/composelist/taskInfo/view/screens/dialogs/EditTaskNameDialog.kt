@@ -32,13 +32,17 @@ import kotlinx.coroutines.delay
  * @param isDialogOpen Flag marking if the dialog is open or closed
  */
 @Composable
-fun EditTaskDialog(
+fun EditTaskNameDialog(
 		task: Task,
+		subTask: MutableState<Task?>? = null,
 		isDialogOpen: MutableState<Boolean>,
 		taskListViewModel: TaskListViewModel
 ) {
 
-	var taskName by remember { mutableStateOf(TextFieldValue(task.name)) }
+	val taskToEdit = subTask?.value ?: task
+
+
+	var taskName by remember { mutableStateOf(TextFieldValue(taskToEdit.name)) }
 
 
 	BaseDialog(title = "Edit Task Name", onDismiss = {
@@ -47,9 +51,18 @@ fun EditTaskDialog(
 	}, onSubmit = {
 		if (taskName.text.trim().isNotEmpty()) {
 
+			val cleanName = taskName.text.trim()
+
 			// Update the the task in the taskList
-			taskListViewModel.updateTaskName(task, taskName.text.trim())
-			isDialogOpen.value = false // for closing the dialog
+			if(subTask?.value !== null){
+				taskListViewModel.updateSubTaskName(task, taskToEdit, cleanName)
+			}
+			else {
+				taskListViewModel.updateTaskName(taskToEdit, cleanName)
+			}
+
+			// for closing the dialog
+			isDialogOpen.value = false
 		}
 	}, submitText = "Done") {
 

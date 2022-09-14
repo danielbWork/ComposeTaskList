@@ -22,7 +22,6 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
 		val taskDao = TaskDatabase.getInstance(application).taskDao()
 		repository = TaskRepository(taskDao)
 		taskList = repository.tasks
-
 	}
 
 	/**
@@ -66,6 +65,62 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
 	fun updateTaskName(task: Task, taskName: String) {
 		viewModelScope.launch(Dispatchers.IO){
 			repository.updateTask(task.copy(name = taskName))
+		}
+	}
+
+	/**
+	 * Adds the new subtask to the task
+	 */
+	fun addSubTask(task: Task, subTask: Task) {
+		viewModelScope.launch(Dispatchers.IO){
+			val newList = task.subTasks.toMutableList()
+			newList.add(subTask)
+			
+			repository.updateTask(task.copy( subTasks = newList.toList()))
+		}
+
+
+	}
+
+	/**
+	 * Toggles a subtask's completion status and updates the db
+	 */
+	fun toggleSubTask(task: Task, subtask: Task) {
+		viewModelScope.launch(Dispatchers.IO){
+
+			val newSubtasks = task.subTasks.toMutableList()
+			val index = task.subTasks.indexOf(subtask)
+			newSubtasks[index] = subtask.copy(isComplete = !subtask.isComplete)
+
+			repository.updateTask(task.copy(subTasks = newSubtasks))
+		}
+	}
+
+	/**
+	 * Removes a subtask from the given task
+	 */
+	fun removeSubTask(task: Task, subtask: Task) {
+		viewModelScope.launch(Dispatchers.IO){
+
+			val newSubtasks = task.subTasks.toMutableList()
+			newSubtasks.remove(subtask)
+
+			repository.updateTask(task.copy(subTasks = newSubtasks))
+		}
+	}
+
+	/**
+	 * Removes a subtask from the given task
+	 */
+	fun updateSubTaskName(task: Task, subtask: Task, name: String) {
+		viewModelScope.launch(Dispatchers.IO){
+
+
+			val newSubtasks = task.subTasks.toMutableList()
+			val index = task.subTasks.indexOf(subtask)
+			newSubtasks[index] = subtask.copy(name = name)
+
+			repository.updateTask(task.copy(subTasks = newSubtasks))
 		}
 	}
 

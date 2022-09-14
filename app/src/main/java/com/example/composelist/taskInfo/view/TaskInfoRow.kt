@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.composelist.taskInfo.view.screens.dialogs.EditTaskDialog
+import com.example.composelist.taskInfo.view.screens.dialogs.EditTaskNameDialog
 import com.example.composelist.tasklist.modal.Task
 import com.example.composelist.tasklist.view.TaskRow
 import com.example.composelist.tasklist.viewModal.TaskListViewModel
@@ -17,11 +17,10 @@ fun TaskInfoRow(task: Task, taskListViewModel: TaskListViewModel) {
 	val openEditDialog =
 			remember { mutableStateOf(false) }// for remembering the value of dialog is open or not
 
-
 	if (openEditDialog.value) {
 
-		// remove the task item from list
-		EditTaskDialog(
+		// Edit the task item from list
+		EditTaskNameDialog(
 				task = task, isDialogOpen = openEditDialog, taskListViewModel = taskListViewModel
 		)
 	}
@@ -33,15 +32,15 @@ fun TaskInfoRow(task: Task, taskListViewModel: TaskListViewModel) {
 			verticalAlignment = Alignment.CenterVertically
 	) {
 
-		TaskRow(task, { task->
+		TaskRow(task,{
+			openEditDialog.value = true
+		}, { task->
 
 			taskListViewModel.toggleTaskCompletion(
 					task = task
 			)
 
-		}) {
-			openEditDialog.value = true
-		}
+		})
 
 	}
 

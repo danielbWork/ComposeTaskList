@@ -37,20 +37,7 @@ fun TaskInfoScreen(navController: NavController, taskListViewModel: TaskListView
 				task = task)
 	}
 
-
 	Scaffold(
-			floatingActionButton = { // when floating action button click it change the value of openAddDialog to true,
-
-				if(task.subTasks.isEmpty()){
-					return@Scaffold
-				}
-
-				FloatingActionButton(onClick = { isAddingSubtask.value = true }) {
-					Icon(imageVector = Icons.Filled.Add, contentDescription = "Add Task to item")
-
-				}
-
-			},
  topBar = {
 		TopAppBar {
 			Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "go back", modifier =

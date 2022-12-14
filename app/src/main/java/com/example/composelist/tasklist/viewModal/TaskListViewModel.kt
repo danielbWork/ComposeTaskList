@@ -90,7 +90,8 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
 
 			val newSubtasks = task.subTasks.toMutableList()
 			val index = task.subTasks.indexOf(subtask)
-			newSubtasks[index] = subtask.copy(isComplete = !subtask.isComplete)
+			// listof is called to fix bug
+			newSubtasks[index] = subtask.copy(isComplete = !subtask.isComplete, subTasks = listOf())
 
 			repository.updateTask(task.copy(subTasks = newSubtasks))
 		}
@@ -115,10 +116,10 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
 	fun updateSubTaskName(task: Task, subtask: Task, name: String) {
 		viewModelScope.launch(Dispatchers.IO){
 
-
 			val newSubtasks = task.subTasks.toMutableList()
 			val index = task.subTasks.indexOf(subtask)
-			newSubtasks[index] = subtask.copy(name = name)
+			// listof is called to fix bug
+			newSubtasks[index] = subtask.copy(name = name, subTasks = listOf())
 
 			repository.updateTask(task.copy(subTasks = newSubtasks))
 		}
